@@ -1,0 +1,32 @@
+Word Count Summary for original dataset
+
+count     4715.000000
+mean      3614.214846
+std       3255.385075
+min         33.000000
+25%       1187.500000
+50%       2779.000000
+75%       5183.500000
+max      24704.000000
+
+Word Count Summary for preprocessed dataset
+
+count     4715.000000
+mean      2761.720042
+std       2502.505262
+min         32.000000
+25%        891.500000
+50%       2109.000000
+75%       3943.000000
+max      18709.000000
+
+Summary of stopwords count 
+
+count    4715.000000
+mean      852.494804
+std       769.003224
+min         0.000000
+25%       278.000000
+50%       655.000000
+75%      1215.500000
+max      6146.000000
