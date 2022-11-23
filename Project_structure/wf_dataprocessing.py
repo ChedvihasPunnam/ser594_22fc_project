@@ -7,7 +7,7 @@ import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 
-df = pd.read_csv('Blog-data-original.csv')
+df = pd.read_csv('data_original\Blog-data-original.csv')
 
 print(df[df.isnull().any(axis=1)])
 
@@ -27,12 +27,12 @@ df_p['content'] = df_p['content'].str.replace("[^\w\s]|[_]", " ")
 
 #to remove any digits or numerical data
 df_p['content'] = df_p['content'].str.replace('\d+', ' ')
-df_p['content'] = df['content'].replace(r'\s+', ' ')
+df_p['content'] = df_p['content'].replace(r'\s+', ' ')
 
 lemmatizer = WordNetLemmatizer()
 stop_words = stopwords.words('english')
 df_p['content'] = df_p['content'].apply(lambda x: ' '.join([word.strip() for word in x.split() if word not in (stop_words)]))
-df_p['content'] = df_p['content'].apply(lambda x: ' '.join([lemmatizer.lemmatize(word.strip()) for word in x.split()]))
+df_p['content'] = df_p['content'].apply(lambda x: ' '.join([lemmatizer.lemmatize(word.strip(),pos='v') for word in x.split()]))
 
 df_p.to_csv('data_processed/Blog-data-preprocessed.csv',index=False)
 
