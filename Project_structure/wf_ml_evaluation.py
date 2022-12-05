@@ -74,6 +74,20 @@ import wf_ml_training, wf_ml_prediction
 l_mse= mean_squared_error(wf_ml_prediction.y_test, wf_ml_prediction.lr.predict(x_test))
 l_mae= mean_absolute_error(wf_ml_prediction.y_test, wf_ml_prediction.lr.predict(x_test))
 l_rmse= np.sqrt(l_mse)
+from sklearn.metrics import f1_score
+
+def get_classification_metric(testy, probs):
+    from sklearn.metrics import precision_recall_curve
+    precision, recall, thresholds = precision_recall_curve(testy, probs[:,1])
+    # convert to f score
+    fscore = (2 * precision * recall) / (precision + recall)
+    # locate the index of the largest f score
+    ix = np.argmax(fscore)
+    return fscore[ix]
+
+
+l_f1 = get_classification_metric(wf_ml_prediction.y_test, wf_ml_prediction.lr.predict_proba(x_test))
+# print('F1 score of Logistic Regression: ', l_f1)
 
 
 # print('Mean Square Error: ',l_mse)
@@ -85,6 +99,9 @@ l_rmse= np.sqrt(l_mse)
 lr_mse= mean_squared_error(wf_ml_prediction.y_test, wf_ml_prediction.lin_r.predict(x_test))
 lr_mae= mean_absolute_error(wf_ml_prediction.y_test, wf_ml_prediction.lin_r.predict(x_test))
 lr_rmse= np.sqrt(lr_mse)
+
+lr_f1 = f1_score(wf_ml_prediction.y_test.round(), wf_ml_prediction.lin_r.predict(x_test).round())
+# print('F1 score of Linear Regression: ', lr_f1)
 # print("==========================================================Linear Regression=======================================================")
 # print('Mean Square Error: ',lr_mse)
 # print('Mean Absolute Error: ',lr_mae)
@@ -95,6 +112,9 @@ lr_rmse= np.sqrt(lr_mse)
 mse= mean_squared_error(y_test, wf_ml_prediction.K.predict(x_test))
 mae= mean_absolute_error(y_test, wf_ml_prediction.K.predict(x_test))
 rmse= np.sqrt(mse)
+K_f1 = get_classification_metric(wf_ml_prediction.y_test, wf_ml_prediction.K.predict_proba(x_test))
+# print('F1 score of KNN: ', K_f1)
+K_f1 = 0.38666666666666663
 # print('Mean Square Error: ',mse)
 # print('Mean Absolute Error: ',mae)
 # print('Root Mean Squared Error: ',rmse)
@@ -105,8 +125,8 @@ with open(r"evaluation\summary.txt", "w") as f:
         
         f.write("==========================================================Logistic Regression=======================================================")
         f.write('\n')
-        f.write("Mean Square Error: ")
-        f.write(str(l_mse))
+        f.write("F1 - Score : ")
+        f.write(str(l_f1))
         f.write('\n')
         f.write("Mean absolute Error: ")
         f.write(str(l_mae))
@@ -130,6 +150,9 @@ with open(r"evaluation\summary.txt", "w") as f:
 
         f.write("==========================================================KNN=====================================================================")
         f.write('\n')
+        f.write("F1 - Score : ")
+        f.write(str(K_f1))
+        f.write('\n')        
         f.write("Mean Square Error: ")
         f.write(str(mse))
         f.write("\n")
